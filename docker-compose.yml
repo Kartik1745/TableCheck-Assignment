@@ -1,0 +1,14 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_container
+    ports:
+      - "27017:27017" # Expose MongoDB on default port 27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin # Default admin username
+      MONGO_INITDB_ROOT_PASSWORD: password # Default admin password
+    volumes:
+      - mongo_data:/data/db # Persist MongoDB data
+
+volumes:
+  mongo_data:
