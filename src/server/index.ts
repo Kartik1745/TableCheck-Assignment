@@ -17,7 +17,12 @@ app.use(express.json());
 // Connect to MongoDB
 connectDB();
 
-// Waitlist APIs
+/**
+ * **GET /api/waitlist**
+ * Fetches all parties currently on the waitlist.
+ * If a `userId` query parameter is provided, it fetches only the waitlist parties associated with that user.
+ * Sorts the results by timestamp (earliest added first).
+ */
 app.get('/api/waitlist', async (req, res) => {
   const { userId } = req.query;
 
@@ -56,7 +61,11 @@ app.delete('/api/waitlist/:id', async (req, res) => {
   }
 });
 
-// Active Tables APIs
+/**
+ * **GET /api/active-tables**
+ * Fetches all parties currently at active tables (statuses: 'reserved', 'checked-in').
+ * If a `userId` query parameter is provided, it fetches only the active parties associated with that user.
+ */
 app.get('/api/active-tables', async (req, res) => {
   const { userId } = req.query;
 
@@ -100,7 +109,6 @@ app.post('/api/active-tables/:id/check-in', async (req, res) => {
       return res.status(404).json({ error: 'Party not found' });
     }
 
-    // Calculate service end time (3 seconds per person)
     const serviceEndTime = Date.now() + (party.size * 3000);
     
     party.status = 'checked-in';

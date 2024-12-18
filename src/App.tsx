@@ -9,37 +9,54 @@ import { SignIn, useUser } from '@clerk/clerk-react';
 const queryClient = new QueryClient();
 
 function WaitlistApp({ userId }: { userId: string; setUserId: (id: string) => void }) {
-  const { waitingParties, activeParties, availableSeats, userWaitingParties, addParty, checkInParty, userActiveParties  } = useWaitlist(userId);
+  const { waitingParties, activeParties, availableSeats, userWaitingParties, addParty, checkInParty, userActiveParties } = useWaitlist(userId);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold flex items-center justify-center gap-2">
-            <Utensils className="h-8 w-8" />
-            Restaurant Waitlist
-          </h1>
-          <p className="text-muted-foreground">
-            Available Seats: {availableSeats} / {10}
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="w-full px-4 py-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div>
+              <div className="text-center md:text-left space-y-4 mb-8">
+                <h1 className="text-4xl font-bold flex items-center md:justify-start justify-center gap-2">
+                  <Utensils className="h-8 w-8" />
+                  Restaurant Waitlist
+                </h1>
+                <p className="text-gray-600">
+                  Available Seats: {availableSeats} / {10}
+                </p>
+              </div>
+              <JoinWaitlist onJoin={addParty} userId={userId} />
+              <div className="mt-8">
+                <PartyList 
+                  waiting={userWaitingParties}
+                  active={userActiveParties}
+                  availableSeats={availableSeats}
+                  onCheckIn={checkInParty}
+                  showOnlyUserParties={true}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="text-center md:text-left space-y-4 mb-8">
+                <h1 className="text-4xl font-bold flex items-center md:justify-start justify-center gap-2">
+                  <Utensils className="h-8 w-8" />
+                  Restaurant Dashboard View
+                </h1>
+                <p className="text-gray-600">
+                  All Active Parties of restaurant for demonstration purpose
+                </p>
+              </div>
+              <PartyList 
+                waiting={waitingParties}
+                active={activeParties}
+                availableSeats={availableSeats}
+                onCheckIn={checkInParty}
+              />
+            </div>
+          </div>
         </div>
-
-        <JoinWaitlist onJoin={addParty} userId={userId} />
-
-        <PartyList 
-          waiting={userWaitingParties}
-          active={userActiveParties}
-          availableSeats={availableSeats}
-          onCheckIn={checkInParty}
-          showOnlyUserParties={true}
-        />
-        
-        <PartyList 
-          waiting={waitingParties}
-          active={activeParties}
-          availableSeats={availableSeats}
-          onCheckIn={checkInParty}
-        />
       </div>
     </div>
   );
@@ -57,9 +74,11 @@ export default function App() {
 
   if (!user.user) {
     return (
-      <>
-        <SignIn />
-      </>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="w-full max-w-md">
+          <SignIn />
+        </div>
+      </div>
     );
   }
 

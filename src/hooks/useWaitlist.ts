@@ -8,7 +8,7 @@ export function useWaitlist(userId: string) {
   const queryClient = useQueryClient();
   const [availableSeats, setAvailableSeats] = useState(0);
 
-  // Fetch waiting parties
+  // Fetch waiting parties, tis functionwill be called every 5 seconds
   const { data: waitingParties = [] } = useQuery(
     'waitlist',
     waitlistService.fetchWaitingParties,
