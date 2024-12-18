@@ -6,10 +6,17 @@ interface WaitingPartyProps {
   party: Party;
   position: number;
   canCheckIn: boolean;
+  showOnlyUserParties: boolean;
   onCheckIn: (partyId: string) => void;
 }
 
-export function WaitingParty({ party, position, canCheckIn, onCheckIn }: WaitingPartyProps) {
+export function WaitingParty({ party, position, canCheckIn, onCheckIn, showOnlyUserParties }: WaitingPartyProps) {
+  const handleCheckIn = () => {
+    if (canCheckIn && party.id) {
+      onCheckIn(party.id);
+    }
+  };
+
   return (
     <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
       <div className="flex items-center gap-3">
@@ -22,10 +29,10 @@ export function WaitingParty({ party, position, canCheckIn, onCheckIn }: Waiting
           </div>
         </div>
       </div>
-      {canCheckIn && (
+      {canCheckIn && showOnlyUserParties && (
         <Button 
           variant="secondary"
-          onClick={() => onCheckIn(party.id)}
+          onClick={handleCheckIn}
         >
           Check In
         </Button>

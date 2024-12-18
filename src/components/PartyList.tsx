@@ -8,17 +8,19 @@ interface PartyListProps {
   waiting: Party[];
   active: Party[];
   availableSeats: number;
+  showOnlyUserParties?: boolean;
   onCheckIn: (partyId: string) => void;
 }
 
-export function PartyList({ waiting, active, availableSeats, onCheckIn }: PartyListProps) {
+export function PartyList({ waiting, active, availableSeats, onCheckIn, showOnlyUserParties=false }: PartyListProps) {
+
   return (
     <div className="grid gap-6 md:grid-cols-2">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            Waiting List
+            Waiting List ({waiting.length})
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -32,6 +34,7 @@ export function PartyList({ waiting, active, availableSeats, onCheckIn }: PartyL
                 position={index + 1}
                 canCheckIn={party.size <= availableSeats}
                 onCheckIn={onCheckIn}
+                showOnlyUserParties={showOnlyUserParties}
               />
             ))
           )}
@@ -42,17 +45,19 @@ export function PartyList({ waiting, active, availableSeats, onCheckIn }: PartyL
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Active Tables
+            Active Tables ({active.length})
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {active.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No active tables</p>
-          ) : (
+          {
+            active.length === 0 ? (
+              <p className="text-muted-foreground text-sm">No active tables</p>
+            ) : (
             active.map((party) => (
               <ActiveParty key={party.id} party={party} />
-            ))
-          )}
+            )
+          )
+        )}
         </CardContent>
       </Card>
     </div>

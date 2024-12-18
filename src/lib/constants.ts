@@ -1,8 +1,9 @@
+// Restaurant configuration constants
 export const TOTAL_SEATS = 10;
-export const SERVICE_TIME_PER_PERSON = 3000;
+export const SERVICE_TIME_PER_PERSON = 3000; // 3 seconds in milliseconds
 export const MAX_PARTY_SIZE = 10;
 
+// Local storage keys
 export const STORAGE_KEYS = {
-  WAITLIST_STATE: 'waitlistState',
-  CURRENT_PARTY: 'currentPartyId',
+  ACTIVE_TABLES: 'activeTablesState',
 } as const;
