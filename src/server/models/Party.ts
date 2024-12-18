@@ -1,10 +1,16 @@
 import mongoose from 'mongoose';
 
 const partySchema = new mongoose.Schema({
+  userId: { type: String, required: true },
   name: { type: String, required: true },
   size: { type: Number, required: true },
   timestamp: { type: Number, default: Date.now },
-  status: { type: String, enum: ['waiting'], default: 'waiting' }
+  status: { 
+    type: String, 
+    enum: ['waiting', 'reserved', 'checked-in'], 
+    default: 'waiting' 
+  },
+  serviceEndTime: { type: Number }
 }, {
   // Transform _id to id in JSON responses
   toJSON: {

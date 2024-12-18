@@ -18,6 +18,8 @@ export function isPartyEligibleForCheckIn(
 ): boolean {
   if (party.status !== 'waiting' || party.size > availableSeats) return false;
 
+  // Check if there are any parties ahead in the queue with a smaller or equal size
+  // that could fit in the available seats
   const partiesAhead = parties.filter(p => 
     p.status === 'waiting' && 
     p.timestamp < party.timestamp &&

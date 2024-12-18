@@ -1,4 +1,5 @@
 export interface Party {
+  userId: string;
   id: string;
   name: string;
   size: number;

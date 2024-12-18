@@ -1,33 +1,53 @@
 import { Party } from '@/types';
-import { STORAGE_KEYS } from '@/lib/constants';
 
-interface ActiveTablesState {
-  parties: Party[];
-  availableSeats: number;
+const API_URL = 'http://localhost:3000/api';
+
+export async function fetchActiveParties(): Promise<Party[]> {
+  try {
+    const response = await fetch(`${API_URL}/active-tables`);
+    if (!response.ok) throw new Error('Failed to fetch active parties');
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching active parties:', error);
+    return [];
+  }
 }
 
-export function getActiveTablesState(): ActiveTablesState {
-  const stored = localStorage.getItem(STORAGE_KEYS.ACTIVE_TABLES);
-  return stored ? JSON.parse(stored) : { parties: [], availableSeats: 10 };
+export async function fetchUserActiveParties({ userId }: { userId: string }): Promise<Party[]> {
+  try {
+    const response = await fetch(`${API_URL}/active-tables?userId=${encodeURIComponent(userId)}`);
+    if (!response.ok) throw new Error('Failed to fetch user active parties');
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching user active parties:', error);
+    return [];
+  }
 }
 
-export function saveActiveTablesState(state: ActiveTablesState): void {
-  localStorage.setItem(STORAGE_KEYS.ACTIVE_TABLES, JSON.stringify(state));
+export async function checkInParty(partyId: string): Promise<Party> {
+  const response = await fetch(`${API_URL}/active-tables/${partyId}/check-in`, {
+    method: 'POST',
+  });
+  console.log("Inside checkInParty >> ", response);
+  if (!response.ok) throw new Error('Failed to check in party');
+  return response.json();
 }
 
-export function addToActiveTables(party: Party): void {
-  const state = getActiveTablesState();
-  state.parties.push(party);
-  state.availableSeats -= party.size;
-  saveActiveTablesState(state);
+export async function completeParty(partyId: string): Promise<void> {
+  const response = await fetch(`${API_URL}/active-tables/${partyId}/complete`, {
+    method: 'POST',
+  });
+  if (!response.ok) throw new Error('Failed to complete party');
 }
 
-export function removeFromActiveTables(partyId: string): void {
-  const state = getActiveTablesState();
-  const party = state.parties.find(p => p.id === partyId);
-  if (party) {
-    state.parties = state.parties.filter(p => p.id !== partyId);
-    state.availableSeats += party.size;
-    saveActiveTablesState(state);
+export async function getAvailableSeats(): Promise<number> {
+  try {
+    const response = await fetch(`${API_URL}/active-tables/available-seats`);
+    if (!response.ok) throw new Error('Failed to fetch available seats');
+    const data = await response.json();
+    return data.availableSeats;
+  } catch (error) {
+    console.error('Error fetching available seats:', error);
+    return 0;
   }
 }

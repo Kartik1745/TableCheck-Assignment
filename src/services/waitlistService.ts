@@ -13,6 +13,18 @@ export async function fetchWaitingParties(): Promise<Party[]> {
   }
 }
 
+export async function fetchUserWaitingParties({ userId } : {userId: string}): Promise<Party[]> {
+  console.log("FETCHING USER WAITING PARTIES >> ", userId);
+  try {
+    const response = await fetch(`${API_URL}/waitlist?userId=${encodeURIComponent(userId)}`);
+    if (!response.ok) throw new Error('Failed to fetch user-specific waiting parties');
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching user-specific waiting parties:', error);
+    return [];
+  }
+}
+
 export async function addToWaitlist(party: Omit<Party, 'id' | 'status' | 'timestamp'>): Promise<Party> {
   const response = await fetch(`${API_URL}/waitlist`, {
     method: 'POST',
