@@ -1,28 +1,15 @@
-import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { JoinWaitlist } from '@/components/JoinWaitlist';
 import { PartyList } from '@/components/PartyList';
 import { useWaitlist } from '@/hooks/useWaitlist';
 import { Utensils } from 'lucide-react';
-import { getStoredPartyId, savePartyId } from '@/lib/storage';
+import { useEffect, useState } from 'react';
+import { SignIn, useUser } from '@clerk/clerk-react';
 
-export default function App() {
-  const { state, addParty, checkInParty, getWaitingParties, getActiveParties } = useWaitlist();
-  const [currentPartyId, setCurrentPartyId] = useState<string | null>(() => 
-    getStoredPartyId()
-  );
+const queryClient = new QueryClient();
 
-  const handleJoinWaitlist = (name: string, size: number) => {
-    const partyId = addParty(name, size);
-    setCurrentPartyId(partyId);
-    savePartyId(partyId);
-  };
-
-  const handleCheckIn = (partyId: string) => {
-    checkInParty(partyId);
-  };
-
-  const waitingParties = getWaitingParties();
-  const activeParties = getActiveParties();
+function WaitlistApp({ userId }: { userId: string; setUserId: (id: string) => void }) {
+  const { waitingParties, activeParties, availableSeats, userWaitingParties, addParty, checkInParty, userActiveParties  } = useWaitlist(userId);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -33,19 +20,52 @@ export default function App() {
             Restaurant Waitlist
           </h1>
           <p className="text-muted-foreground">
-            Available Seats: {state.availableSeats} / {state.totalSeats}
+            Available Seats: {availableSeats} / {10}
           </p>
         </div>
 
-        <JoinWaitlist onJoin={handleJoinWaitlist} />
+        <JoinWaitlist onJoin={addParty} userId={userId} />
+
+        <PartyList 
+          waiting={userWaitingParties}
+          active={userActiveParties}
+          availableSeats={availableSeats}
+          onCheckIn={checkInParty}
+          showOnlyUserParties={true}
+        />
         
         <PartyList 
           waiting={waitingParties}
           active={activeParties}
-          availableSeats={state.availableSeats}
-          onCheckIn={handleCheckIn}
+          availableSeats={availableSeats}
+          onCheckIn={checkInParty}
         />
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  const user = useUser();
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    if (user.user) {
+      setUserId(user.user.id);
+    }
+  }, [user.user]);
+
+  if (!user.user) {
+    return (
+      <>
+        <SignIn />
+      </>
+    );
+  }
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <WaitlistApp userId={userId} setUserId={setUserId} />
+    </QueryClientProvider>
   );
 }
