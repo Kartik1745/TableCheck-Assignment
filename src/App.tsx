@@ -74,9 +74,17 @@ export default function App() {
 
   if (!user.user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="w-full max-w-md">
-          <SignIn />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        <div className="w-full max-w-md px-8 py-12 mx-4">
+          <div className="flex flex-col items-center space-y-6 mb-8">
+            <div className="p-3 rounded-full bg-primary/10">
+              <Utensils className="w-8 h-8 text-primary" />
+            </div>
+            <div className="text-center space-y-2">
+              <h1 className="text-2xl font-semibold tracking-tight">Welcome to Restaurant Waitlist</h1>
+            </div>
+          </div>
+            <SignIn />
         </div>
       </div>
     );

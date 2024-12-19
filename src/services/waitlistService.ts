@@ -1,3 +1,10 @@
+/* 
+
+This module provides utility functions to interact with the API for managing the waitlist, 
+including fetching, adding, and removing parties.
+
+*/
+
 import { Party } from '@/types';
 
 const API_URL = 'http://localhost:3000/api';

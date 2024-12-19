@@ -1,3 +1,6 @@
+// This file contain a component that displays the active party and the time left for the party to end. 
+// The component is used in the PartyList component to display the active parties.
+
 import { Users, Clock } from "lucide-react";
 import { Party } from "@/types";
 import { useEffect, useState } from "react";

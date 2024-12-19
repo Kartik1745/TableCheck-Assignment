@@ -1,3 +1,6 @@
+// This file contain a component that displays a form to join the waitlist of the restaurant.
+// The component is used in the Waitlist component to allow users to join the waitlist.
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,7 +57,7 @@ export function JoinWaitlist({ onJoin, userId }: JoinWaitlistProps) {
               min="1"
               max="10"
               value={size}
-              onChange={(e) => setSize(parseInt(e.target.value) || 1)}
+              onChange={(e) => setSize(parseInt(e.target.value))}
               required
             />
           </div>

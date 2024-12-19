@@ -1,3 +1,6 @@
+// This file contain a component that displays the list of parties waiting and the active tables in the restaurant.
+// The component is used in the WaitlistPage component to display the waitlist and active tables.
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Party } from "@/types";
 import { Clock, Users } from "lucide-react";

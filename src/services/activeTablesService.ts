@@ -1,3 +1,10 @@
+/*
+
+This module provides utility functions to interact with the API for managing parties, 
+including fetching active parties, checking in, completing, and querying available seats.
+
+ */
+
 import { Party } from '@/types';
 
 const API_URL = 'http://localhost:3000/api';

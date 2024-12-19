@@ -1,3 +1,6 @@
+// This file contain a component that displays the waitlist status of a party.
+// The component is used in the Waitlist component to display the waitlist status of a party.
+
 import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
